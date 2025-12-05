@@ -33,10 +33,16 @@ public class GlobalExceptionHandler {
         return getErrorResponse(status, ex.getMessage());
     }
 
+    /**
+     * Bean Validation 에러 핸들링
+     * @param ex 요청 DTO의 필드 검증 실패 예외
+     * @return 400 Bad Request와 예외 메시지
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
+        // 여러 메시지를 하나의 문자열로 묶음
         String message = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> String.format("%s", error.getDefaultMessage()))
                 .reduce((m1, m2) -> m1 + ", " + m2)

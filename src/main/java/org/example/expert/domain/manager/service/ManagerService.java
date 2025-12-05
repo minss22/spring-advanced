@@ -31,12 +31,13 @@ public class ManagerService {
 
     @Transactional
     public ManagerSaveResponse saveManager(AuthUser authUser, long todoId, ManagerSaveRequest managerSaveRequest) {
-        // 일정을 만든 유저
-        User user = User.fromAuthUser(authUser);
+        User user = User.fromAuthUser(authUser); // 로그인한 유저
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
-        User todoUser = todo.getUser();
+        User todoUser = todo.getUser(); // 일정을 생성한 유저
+        // 일정을 생성한 유저가 null인지 먼저 확인 후, 로그인한 유저 id와 일정을 생성한 유저 id를 비교
+        // todoUser가 null인데 .getId()를 호출하면 NullPointerException 예외 발생
         if (todoUser == null || !Objects.equals(user.getId(), todoUser.getId())) {
             throw new InvalidRequestException("일정을 생성한 유저만 담당자를 지정할 수 있습니다.");
         }

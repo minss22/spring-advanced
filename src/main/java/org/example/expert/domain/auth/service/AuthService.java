@@ -23,14 +23,20 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    /**
+     * 회원가입
+     * @param signupRequest 회원가입 요청 DTO (이메일, 비밀번호, 권한)
+     * @return 회원가입 응답 DTO (토큰)
+     */
     @Transactional
     public SignupResponse signup(SignupRequest signupRequest) {
 
-        if (userRepository.existsByEmail(signupRequest.getEmail())) {
+        // ♻️ Early Return: 불필요한 동작을 막기 위해 맨 앞에 배치함
+        if (userRepository.existsByEmail(signupRequest.getEmail())) { // 이메일 확인 (이미 존재하는 이메일이면 예외)
             throw new InvalidRequestException("이미 존재하는 이메일입니다.");
         }
 
-        String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
+        String encodedPassword = passwordEncoder.encode(signupRequest.getPassword()); // 비밀번호 암호화
         UserRole userRole = UserRole.of(signupRequest.getUserRole());
 
         User newUser = new User(

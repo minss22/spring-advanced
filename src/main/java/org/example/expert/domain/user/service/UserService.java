@@ -25,7 +25,7 @@ public class UserService {
 
     @Transactional
     public void changePassword(long userId, UserChangePasswordRequest userChangePasswordRequest) {
-
+        // ♻️ 데이터 유효성 검사하는 로직을 해당 API의 요청 DTO에서 처리
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new InvalidRequestException("User not found"));
 

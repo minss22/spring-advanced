@@ -17,11 +17,21 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * 회원가입
+     * @param signupRequest 회원가입 요청 DTO (이메일, 비밀번호, 권한)
+     * @return 회원가입 응답 DTO (토큰)
+     */
     @PostMapping("/auth/signup")
     public SignupResponse signup(@Valid @RequestBody SignupRequest signupRequest) {
         return authService.signup(signupRequest);
     }
 
+    /**
+     * 로그인
+     * @param signinRequest 로그인 요청 DTO (이메일, 비밀번호)
+     * @return 로그인 응답 DTO 토큰
+     */
     @PostMapping("/auth/signin")
     public SigninResponse signin(@Valid @RequestBody SigninRequest signinRequest) {
         return authService.signin(signinRequest);

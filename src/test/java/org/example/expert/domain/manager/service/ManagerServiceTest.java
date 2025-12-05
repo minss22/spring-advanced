@@ -42,7 +42,7 @@ class ManagerServiceTest {
     public void manager_목록_조회_시_Todo가_없다면_IRE_에러를_던진다() {
         // given
         long todoId = 1L;
-        given(todoRepository.findById(todoId)).willReturn(Optional.empty());
+        given(todoRepository.findById(todoId)).willReturn(Optional.empty()); // 일정이 null
 
         // when & then
         InvalidRequestException exception = assertThrows(InvalidRequestException.class, () -> managerService.getManagers(todoId));
@@ -57,7 +57,7 @@ class ManagerServiceTest {
         long managerUserId = 2L;
 
         Todo todo = new Todo();
-        ReflectionTestUtils.setField(todo, "user", null);
+        ReflectionTestUtils.setField(todo, "user", null); // 일정을 생성한 유저가 null
 
         ManagerSaveRequest managerSaveRequest = new ManagerSaveRequest(managerUserId);
 
